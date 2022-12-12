@@ -22,7 +22,7 @@ sudo apt update && upgrade
 
 3. Instalace MQTT brokeru (Mosquitto)
 ```
-sudo apt install mosquitto mosquitto-clients
+sudo apt install mosquitto mosquitto-clients libmosquitto-dev
 sudo systemctl status mosquitto
 sudo systemctl enable mosquitto
 ```
@@ -66,7 +66,7 @@ gpio load i2c
 ### Kompilace a puštění celého programu programu
 ```
 cd ZPI
-gcc postel.c -o postel -I/usr/local/include -L/usr/local/lib -lwiringPi
+gcc postel.c -o postel -I/usr/local/include -L/usr/local/lib -lwiringPi -lmosquitto
 ./postel
 ```
 
