@@ -93,15 +93,15 @@ float gyroskop(float lastGyroZ, float elapsedTime) {
 
     Gyro_z = lastGyroZ + Gyro_z * elapsedTime;
 
-    return 
+    return Gyro_z;
 }
 
 /////////////////////////////////////////////////////////////////////
 /*
     Obsluha senzoru vibrací
 */
-bool vibracniSenzor(bool *zaznamenanaVibrace, bool *posledniVibrace) {
-  bool vibrace = digitalRead(VIBRATION_PIN);
+int vibracniSenzor(int *zaznamenanaVibrace, int *posledniVibrace) {
+  int vibrace = digitalRead(VIBRATION_PIN);
   
   if (*posledniVibrace != vibrace) {
     !*zaznamenanaVibrace;
@@ -114,12 +114,12 @@ bool vibracniSenzor(bool *zaznamenanaVibrace, bool *posledniVibrace) {
 /*
     Obsluha PIR senzoru
 */
-void pirSenzor(bool *pohybPacienta) {
+void pirSenzor(int *pohybPacienta) {
   if(digitalRead(PIR_PIN) == LOW) {
-    *pohybPacienta = true;
+    *pohybPacienta = 1;
   }
   else {
-    *pohybPacienta = false;
+    *pohybPacienta = 0;
   }
 }
 
@@ -128,12 +128,12 @@ void pirSenzor(bool *pohybPacienta) {
     Obsluha IR zavory
     (Nahrada za porouchany tenzometr)
 */
-void irSenzor(bool *leziNaPosteli) {
+void irSenzor(int *leziNaPosteli) {
   if(digitalRead(IR_PIN) == LOW) {
-    *leziNaPosteli = true;
+    *leziNaPosteli = 1;
   }
   else {
-    *leziNaPosteli = false;
+    *leziNaPosteli = 0;
   }
 }
 
@@ -166,11 +166,11 @@ int main(){
     /*
       Proměnné pro ostatní senzory
     */
-    bool pohybPacienta = false;
-    bool dechPacienta = false;
-    bool leziNaPosteli = false;
-    bool zaznamenanaVibrace = false;
-    bool posledniVibrace = false;
+    int pohybPacienta = 0;
+    int dechPacienta = 0;
+    int leziNaPosteli = 0;
+    int zaznamenanaVibrace = 0;
+    int posledniVibrace = 0;
 
 
     /*
@@ -189,7 +189,7 @@ int main(){
           Parametry se předávají jako reference
         */
         previousTime = currentTime; // získání času z předchozí smyčky
-        currentTime = Millis(); // aktuální čas
+        currentTime = millis(); // aktuální čas
         elapsedTime = (currentTime - previousTime) / 1000;  // vypočítá čas, za který se senzor pootočil o určitý úhel
 
         gyroZ = gyroskop(gyroZ, elapsedTime);
