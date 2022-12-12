@@ -65,27 +65,35 @@ short read_raw_data(int addr){
     return value;
 }
 // Získání reálných dat ze surových (přepočet apod...)
-float gyroskop(float *Gx, float *Gy, float *Gz) {
-    float Gyro_x,Gyro_y,Gyro_z;
+float gyroskop(float lastGyroZ, float elapsedTime) {
+    float Acc_x, Acc_y, Acc_z;
+    float Gyro_x, Gyro_y, Gyro_z;
+
+    /* Čtení surových dat MPU6050*/
+    /*
+    Acc_x = read_raw_data(ACCEL_XOUT_H);
+    Acc_y = read_raw_data(ACCEL_YOUT_H);
+    Acc_z = read_raw_data(ACCEL_ZOUT_H);
 
     Gyro_x = read_raw_data(GYRO_XOUT_H);
     Gyro_y = read_raw_data(GYRO_YOUT_H);
+    */
     Gyro_z = read_raw_data(GYRO_ZOUT_H);
 
-    *Gx = Gyro_x/131;
-    *Gy = Gyro_y/131;
-    *Gz = Gyro_z/131;
+    /* Přepočet a škálování dat */
+    /*
+    Acc_x = Acc_x/16384.0;
+    Acc_y = Acc_y/16384.0;
+    Acc_z = Acc_z/16384.0;
 
-    // úhly získáme tak, že naměřené hodnoty úhlové rychlosti vynásobíme časovým intervalem
-    gyroAngleX = gyroAngleX + GyroX * elapsedTime; // stupeň / sekunda * sekunda = stupeň
-    gyroAngleY = gyroAngleY + gyro * elapsedTime;
-    yaw = yaw + GyroZ * elapsedTime; // namísto yaw jsme mohli dát gyroAngleZ
+    Gyro_x = Gyro_x/131;
+    Gyro_y = Gyro_y/131;
+    */
+    Gyro_z = Gyro_z/131;
 
-    // pro získání přesnějších měření kombinujeme, 96% hodnoty bude tvořit hodnota z gyroskopu, 4% z akcelerometru
-    roll = 0.96 * gyroAngleX + 0.04 * accAngleX;
-    pitch = 0.96 * gyroAngleY + 0.04 * accAngleY;
+    Gyro_z = lastGyroZ + Gyro_z * elapsedTime;
 
-    return pitch;
+    return 
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -152,8 +160,8 @@ int main(){
     /*
       Proměnné pro gyroskop s akcelerometrem
     */
-    float Gx = 0, Gy = 0, Gz = 0; Ax = 0, Ay = 0, Az = 0;
-    float GyroZ = 0;
+    float gyroZ = 0;
+    float elapsedTime, currentTime, previousTime;
 
     /*
       Proměnné pro ostatní senzory
@@ -180,7 +188,11 @@ int main(){
           Získání úhlu osy Z z akcelerometru a gyroskopu
           Parametry se předávají jako reference
         */
-        GyroZ = gyroskop(&Gx, &Gy, &Gz);
+        previousTime = currentTime; // získání času z předchozí smyčky
+        currentTime = Millis(); // aktuální čas
+        elapsedTime = (currentTime - previousTime) / 1000;  // vypočítá čas, za který se senzor pootočil o určitý úhel
+
+        gyroZ = gyroskop(gyroZ, elapsedTime);
 
         // Získání informací ze senzoru vibrací
         vibracniSenzor(&zaznamenanaVibrace, &posledniVibrace);
@@ -192,7 +204,7 @@ int main(){
         irSenzor(&leziNaPosteli);
         
 
-        printf("\n GyroZ = %.2f", GyroZ);
+        printf("\n GyroZ = %.2f", gyroZ);
         printf("\n Vibrace: %d", zaznamenanaVibrace);
         printf("\n Pohyb: %d", pohybPacienta);
         printf("\n Lezi na posteli: %d", leziNaPosteli);
