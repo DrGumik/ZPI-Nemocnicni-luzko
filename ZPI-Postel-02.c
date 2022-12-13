@@ -18,6 +18,7 @@ Others required apps: gcc
 #include <wiringPi.h>
 #include <wiringPiI2C.h>
 #include <mosquitto.h>
+#include <math.h>
 
 /*
   Konstanty GPIO pinů pro ostatní senzory
@@ -43,7 +44,7 @@ Others required apps: gcc
 #define GYRO_ZOUT_H  0x47
 
 int fd;
-
+float accAngleX, accAngleY;
 
 /////////////////////////////////////////////////////////////////////
 /*
@@ -66,35 +67,23 @@ short read_raw_data(int addr){
   return value;
 }
 // Získání reálných dat ze surových (přepočet apod...)
-float gyroskop(float lastGyroZ, float elapsedTime) {
-  float Acc_x, Acc_y, Acc_z;
-  float Gyro_x, Gyro_y, Gyro_z;
+void gyroskop(float elapsedTime) {
+  /* Čtení surových dat MPU6050, přepočet a škálování dat */
+  float AccX = read_raw_data(ACCEL_XOUT_H) / 16384.0;
+  float AccY = read_raw_data(ACCEL_YOUT_H) / 16384.0;
+  float AccZ = read_raw_data(ACCEL_ZOUT_H) / 16384.0;
 
-  /* Čtení surových dat MPU6050*/
-  /*
-  Acc_x = read_raw_data(ACCEL_XOUT_H);
-  Acc_y = read_raw_data(ACCEL_YOUT_H);
-  Acc_z = read_raw_data(ACCEL_ZOUT_H);
+  // určení úhlu x a y trigonometrickou metodou a ošetření hodnot odečtením odchylky
+  accAngleX = (atan(AccY / sqrt(pow(AccX, 2) + pow(AccZ, 2))) * 180 / 3.14159) - 0; // AccErrorX ~ (+76.653)
+  accAngleY = (atan(-1 * AccX / sqrt(pow(AccY, 2) + pow(AccZ, 2))) * 180 / 3.14159) + 0; // AccErrorY ~ (-4.878)
 
-  Gyro_x = read_raw_data(GYRO_XOUT_H);
-  Gyro_y = read_raw_data(GYRO_YOUT_H);
-  */
-  Gyro_z = read_raw_data(GYRO_ZOUT_H);
+  if (accAngleX < 0) {
+    accAngleX = accAngleX * -1;
+  }
 
-  /* Přepočet a škálování dat */
-  /*
-  Acc_x = Acc_x/16384.0;
-  Acc_y = Acc_y/16384.0;
-  Acc_z = Acc_z/16384.0;
-
-  Gyro_x = Gyro_x/131;
-  Gyro_y = Gyro_y/131;
-  */
-  Gyro_z = Gyro_z/131;
-
-  Gyro_z = lastGyroZ + Gyro_z * elapsedTime;
-
-  return Gyro_z;
+  if (accAngleY < 0) {
+    accAngleY = accAngleY * -1;
+  }
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -153,16 +142,14 @@ void ms_delay(int val){
 
 
 
-
 /////////////////////////////////////////////////////////////////////
 /*
     Hlavní funkce programu
 */
 int main(){
   /*
-    Proměnné pro gyroskop s akcelerometrem
+    Proměnné času
   */
-  float gyroZ = 0;
   float elapsedTime, currentTime, previousTime;
   /*
     Proměnné pro ostatní senzory a mqtt
@@ -216,7 +203,7 @@ int main(){
       currentTime = millis(); // aktuální čas
       elapsedTime = (currentTime - previousTime) / 1000;  // vypočítá čas, za který se senzor pootočil o určitý úhel
 
-      gyroZ = gyroskop(gyroZ, elapsedTime);
+      gyroskop(elapsedTime);
 
       // Získání informací ze senzoru vibrací
       vibracniSenzor(&zaznamenanaVibrace, &posledniVibrace);
@@ -231,8 +218,10 @@ int main(){
         Odeslání dat do MQTT
       */
       // Make string from float
-      char gyroStringBfr[10];
-      sprintf(gyroStringBfr, "%06.2f", gyroZ);
+      char angleXStringBfr[10];
+      sprintf(angleXStringBfr, "%06.2f", accAngleX);
+      char angleYStringBfr[10];
+      sprintf(angleYStringBfr, "%06.2f", accAngleY);
       char vibraceStringBfr[1];
       sprintf(vibraceStringBfr, "%d", zaznamenanaVibrace);
       char pohybStringBfr[1];
@@ -240,18 +229,20 @@ int main(){
       char leziStringBfr[1];
       sprintf(leziStringBfr, "%d", leziNaPosteli);
 
-      mosquitto_publish(mqtt, NULL, "postel/gyroskop", 6, gyroStringBfr, 0, false);
+      mosquitto_publish(mqtt, NULL, "postel/gyroskopX", 6, angleXStringBfr, 0, false);
+      mosquitto_publish(mqtt, NULL, "postel/gyroskopY", 6, angleYStringBfr, 0, false);
       mosquitto_publish(mqtt, NULL, "postel/vibrace", 1, vibraceStringBfr, 0, false);
       mosquitto_publish(mqtt, NULL, "postel/pir", 1, pohybStringBfr, 0, false);
       mosquitto_publish(mqtt, NULL, "postel/IR", 1, leziStringBfr, 0, false);
 
-      printf("\n GyroZ = %s", gyroStringBfr);
+      printf("\n Uhel X = %s", angleXStringBfr);
+      printf("\n Uhel Y = %s", angleYStringBfr);
       printf("\n Vibrace: %s", vibraceStringBfr);
       printf("\n PIR: %s", pohybStringBfr);
       printf("\n Lezi na posteli: %s", leziStringBfr);
       printf("\n");
       
-      delay(750);
+      delay(1000);
   }
 
   /*

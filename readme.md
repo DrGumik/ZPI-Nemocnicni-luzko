@@ -66,7 +66,7 @@ gpio load i2c
 ### Kompilace a puštění celého programu programu
 ```
 cd ZPI
-gcc postel.c -o postel -I/usr/local/include -L/usr/local/lib -lwiringPi -lmosquitto
+gcc postel.c -o postel -I/usr/local/include -L/usr/local/lib -lwiringPi -lmosquitto -lm
 ./postel
 ```
 
