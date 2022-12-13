@@ -105,12 +105,7 @@ int vibracniSenzor(int *zaznamenanaVibrace, int *posledniVibrace) {
     Obsluha PIR senzoru
 */
 void pirSenzor(int *pohybPacienta) {
-  if(digitalRead(PIR_PIN) == LOW) {
-    *pohybPacienta = 1;
-  }
-  else {
-    *pohybPacienta = 0;
-  }
+  *pohybPacienta = digitalRead(PIR_PIN);
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -119,12 +114,7 @@ void pirSenzor(int *pohybPacienta) {
     (Nahrada za porouchany tenzometr)
 */
 void irSenzor(int *leziNaPosteli) {
-  if(digitalRead(IR_PIN) == LOW) {
-    *leziNaPosteli = 1;
-  }
-  else {
-    *leziNaPosteli = 0;
-  }
+  *leziNaPosteli = digitalRead(IR_PIN);
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -161,6 +151,15 @@ int main(){
   int posledniVibrace = 0;
   int recconect;
   struct mosquitto * mqtt;
+
+
+  /*
+    Inicializace GPIO
+  */
+  wiringPiSetup();
+  pinMode(VIBRATION_PIN, INPUT);
+  pinMode(PIR_PIN, INPUT);
+  pinMode(IR_PIN, INPUT);
 
 
   /*
