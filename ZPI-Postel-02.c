@@ -215,13 +215,12 @@ int main(){
       irSenzor(&leziNaPosteli);
       
       /*
-        Odeslání dat do MQTT
+        Přetypování dat do stringů a odeslání na MQTT server
       */
-      // Make string from float
       char angleXStringBfr[10];
-      sprintf(angleXStringBfr, "%06.2f", accAngleX);
+      sprintf(angleXStringBfr, "%6.2f", accAngleX);
       char angleYStringBfr[10];
-      sprintf(angleYStringBfr, "%06.2f", accAngleY);
+      sprintf(angleYStringBfr, "%6.2f", accAngleY);
       char vibraceStringBfr[1];
       sprintf(vibraceStringBfr, "%d", zaznamenanaVibrace);
       char pohybStringBfr[1];
@@ -235,6 +234,10 @@ int main(){
       mosquitto_publish(mqtt, NULL, "postel/pir", 1, pohybStringBfr, 0, false);
       mosquitto_publish(mqtt, NULL, "postel/IR", 1, leziStringBfr, 0, false);
 
+      /*
+        Výpis dat do terminálu
+      */
+      system("clear");
       printf("\n Uhel X = %s", angleXStringBfr);
       printf("\n Uhel Y = %s", angleYStringBfr);
       printf("\n Vibrace: %s", vibraceStringBfr);
@@ -242,7 +245,7 @@ int main(){
       printf("\n Lezi na posteli: %s", leziStringBfr);
       printf("\n");
       
-      delay(1000);
+      delay(500);
   }
 
   /*
