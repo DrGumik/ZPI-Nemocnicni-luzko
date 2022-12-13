@@ -1,0 +1,547 @@
+[
+    {
+        "id": "19b2123be04c3afe",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "6b6e1e9246f0d199",
+        "type": "inject",
+        "z": "19b2123be04c3afe",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "1",
+        "payloadType": "num",
+        "x": 110,
+        "y": 220,
+        "wires": [
+            [
+                "bd17dff8dd584da5"
+            ]
+        ]
+    },
+    {
+        "id": "bd17dff8dd584da5",
+        "type": "mqtt out",
+        "z": "19b2123be04c3afe",
+        "name": "",
+        "topic": "postel/pir",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "169f128ab66c688b",
+        "x": 260,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "1ebcdf0c107e8acd",
+        "type": "ui_toast",
+        "z": "19b2123be04c3afe",
+        "position": "top right",
+        "displayTime": "5",
+        "highlight": "",
+        "sendall": true,
+        "outputs": 0,
+        "ok": "OK",
+        "cancel": "",
+        "raw": false,
+        "className": "",
+        "topic": "",
+        "name": "",
+        "x": 1110,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "5bfce0002f4e9858",
+        "type": "inject",
+        "z": "19b2123be04c3afe",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "0",
+        "payloadType": "num",
+        "x": 110,
+        "y": 260,
+        "wires": [
+            [
+                "bd17dff8dd584da5"
+            ]
+        ]
+    },
+    {
+        "id": "659fa261b7959082",
+        "type": "switch",
+        "z": "19b2123be04c3afe",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "1",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 810,
+        "y": 220,
+        "wires": [
+            [
+                "6e6b6f655f30049b"
+            ]
+        ]
+    },
+    {
+        "id": "6e6b6f655f30049b",
+        "type": "function",
+        "z": "19b2123be04c3afe",
+        "name": "message",
+        "func": "msg.payload = \"Pacient se pohnul!\"\nmsg.topic = \"PIR Senzor\"\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 940,
+        "y": 220,
+        "wires": [
+            [
+                "1ebcdf0c107e8acd"
+            ]
+        ]
+    },
+    {
+        "id": "1f9e027e0b7fa8b8",
+        "type": "mqtt in",
+        "z": "19b2123be04c3afe",
+        "name": "",
+        "topic": "postel/pir",
+        "qos": "2",
+        "datatype": "utf8",
+        "broker": "1f67b88578365ac0",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 480,
+        "y": 180,
+        "wires": [
+            [
+                "c046391f1a2d089e",
+                "c4b57396151a51bb"
+            ]
+        ]
+    },
+    {
+        "id": "91e5f69e32e31c44",
+        "type": "mqtt in",
+        "z": "19b2123be04c3afe",
+        "name": "",
+        "topic": "postel/gyroskop",
+        "qos": "2",
+        "datatype": "utf8",
+        "broker": "1f67b88578365ac0",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 500,
+        "y": 320,
+        "wires": [
+            [
+                "4c418518b74ca94d",
+                "b4570d99e1d119f5"
+            ]
+        ]
+    },
+    {
+        "id": "4c418518b74ca94d",
+        "type": "ui_text",
+        "z": "19b2123be04c3afe",
+        "group": "50845112f534a89e",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Poloha postele",
+        "format": "{{msg.payload}} stupňů",
+        "layout": "row-spread",
+        "className": "",
+        "x": 940,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "fa2e14f8b5901bbc",
+        "type": "mqtt in",
+        "z": "19b2123be04c3afe",
+        "name": "",
+        "topic": "postel/IR",
+        "qos": "2",
+        "datatype": "utf8",
+        "broker": "1f67b88578365ac0",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 480,
+        "y": 440,
+        "wires": [
+            [
+                "9df4c3a8844f08f6",
+                "4b64917342e35190"
+            ]
+        ]
+    },
+    {
+        "id": "1eb9b7983e9ee088",
+        "type": "mqtt in",
+        "z": "19b2123be04c3afe",
+        "name": "",
+        "topic": "postel/vibrace",
+        "qos": "2",
+        "datatype": "utf8",
+        "broker": "1f67b88578365ac0",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 490,
+        "y": 580,
+        "wires": [
+            [
+                "57a6f49faf7b08ee",
+                "363580113651cc6d"
+            ]
+        ]
+    },
+    {
+        "id": "acede7aa093a779d",
+        "type": "ui_chart",
+        "z": "19b2123be04c3afe",
+        "name": "",
+        "group": "50845112f534a89e",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "label": "IR senzor",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "1",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 920,
+        "y": 440,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "7f72bd91731f66a2",
+        "type": "ui_text",
+        "z": "19b2123be04c3afe",
+        "group": "50845112f534a89e",
+        "order": 3,
+        "width": 8,
+        "height": 1,
+        "name": "",
+        "label": "Vibrace",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "className": "",
+        "x": 980,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "b75a11e1e06011c2",
+        "type": "ui_chart",
+        "z": "19b2123be04c3afe",
+        "name": "",
+        "group": "50845112f534a89e",
+        "order": 7,
+        "width": 0,
+        "height": 0,
+        "label": "PIR senzor",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "1",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 990,
+        "y": 180,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "57a6f49faf7b08ee",
+        "type": "function",
+        "z": "19b2123be04c3afe",
+        "name": "convertState",
+        "func": "if(msg.payload == \"1\") msg.payload = \"False\";\nelse msg.payload = \"True\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 730,
+        "y": 580,
+        "wires": [
+            [
+                "7f72bd91731f66a2"
+            ]
+        ]
+    },
+    {
+        "id": "c4b57396151a51bb",
+        "type": "debug",
+        "z": "19b2123be04c3afe",
+        "name": "debug 1",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 820,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "b4570d99e1d119f5",
+        "type": "debug",
+        "z": "19b2123be04c3afe",
+        "name": "debug 2",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 700,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "9df4c3a8844f08f6",
+        "type": "debug",
+        "z": "19b2123be04c3afe",
+        "name": "debug 3",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 660,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "363580113651cc6d",
+        "type": "debug",
+        "z": "19b2123be04c3afe",
+        "name": "debug 4",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 680,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "c046391f1a2d089e",
+        "type": "function",
+        "z": "19b2123be04c3afe",
+        "name": "convertState",
+        "func": "if (msg.payload == \"0\") {\n    msg.payload = 1;\n} else {\n    msg.payload = 0;\n}\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 650,
+        "y": 180,
+        "wires": [
+            [
+                "659fa261b7959082",
+                "c4b57396151a51bb",
+                "b75a11e1e06011c2"
+            ]
+        ]
+    },
+    {
+        "id": "4b64917342e35190",
+        "type": "function",
+        "z": "19b2123be04c3afe",
+        "name": "convertState",
+        "func": "if (msg.payload == \"0\") {\n    msg.payload = 1;\n} else {\n    msg.payload = 0;\n}\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 670,
+        "y": 440,
+        "wires": [
+            [
+                "acede7aa093a779d"
+            ]
+        ]
+    },
+    {
+        "id": "169f128ab66c688b",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "localhost",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "1f67b88578365ac0",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "localhost",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "50845112f534a89e",
+        "type": "ui_group",
+        "name": "ZPI_POSTEL",
+        "tab": "1eb8e35f71afd30c",
+        "order": 1,
+        "disp": true,
+        "width": 8,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "1eb8e35f71afd30c",
+        "type": "ui_tab",
+        "name": "ZPI - Postel",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    }
+]
