@@ -94,7 +94,7 @@ int vibracniSenzor(int *zaznamenanaVibrace, int *posledniVibrace) {
   int vibrace = digitalRead(VIBRATION_PIN);
   
   if (*posledniVibrace != vibrace) {
-    !*zaznamenanaVibrace;
+    *zaznamenanaVibrace = vibrace;
   }
   
   *posledniVibrace = vibrace;

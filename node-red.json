@@ -192,7 +192,7 @@
         "height": 1,
         "name": "",
         "label": "X-ová poloha postele:",
-        "format": "{{msg.payload}} stupňů",
+        "format": "{{msg.payload}} °",
         "layout": "row-left",
         "className": "",
         "x": 960,
@@ -238,8 +238,8 @@
         "y": 500,
         "wires": [
             [
-                "57a6f49faf7b08ee",
-                "363580113651cc6d"
+                "363580113651cc6d",
+                "b4f5be232f4879cd"
             ]
         ]
     },
@@ -249,13 +249,13 @@
         "z": "19b2123be04c3afe",
         "name": "",
         "group": "50845112f534a89e",
-        "order": 5,
+        "order": 3,
         "width": 0,
         "height": 0,
         "label": "IR senzor",
         "chartType": "line",
         "legend": "false",
-        "xformat": "HH:mm",
+        "xformat": "auto",
         "interpolate": "linear",
         "nodata": "",
         "dot": false,
@@ -288,29 +288,12 @@
         ]
     },
     {
-        "id": "7f72bd91731f66a2",
-        "type": "ui_text",
-        "z": "19b2123be04c3afe",
-        "group": "50845112f534a89e",
-        "order": 3,
-        "width": 8,
-        "height": 1,
-        "name": "",
-        "label": "Vibrace:",
-        "format": "{{msg.payload}}",
-        "layout": "row-left",
-        "className": "",
-        "x": 920,
-        "y": 500,
-        "wires": []
-    },
-    {
         "id": "b75a11e1e06011c2",
         "type": "ui_chart",
         "z": "19b2123be04c3afe",
         "name": "",
         "group": "50845112f534a89e",
-        "order": 6,
+        "order": 4,
         "width": 0,
         "height": 0,
         "label": "PIR senzor",
@@ -346,25 +329,6 @@
         "y": 180,
         "wires": [
             []
-        ]
-    },
-    {
-        "id": "57a6f49faf7b08ee",
-        "type": "function",
-        "z": "19b2123be04c3afe",
-        "name": "convertState",
-        "func": "if(msg.payload == \"1\") msg.payload = \"False\";\nelse msg.payload = \"True\";\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 690,
-        "y": 500,
-        "wires": [
-            [
-                "7f72bd91731f66a2"
-            ]
         ]
     },
     {
@@ -481,7 +445,7 @@
         "height": 1,
         "name": "",
         "label": "Y-ová poloha postele:",
-        "format": "{{msg.payload}} stupňů",
+        "format": "{{msg.payload}} °",
         "layout": "row-left",
         "className": "",
         "x": 960,
@@ -536,14 +500,67 @@
         ]
     },
     {
-        "id": "220c54006bf6921f",
-        "type": "ui_spacer",
+        "id": "3b50c0aeba261013",
+        "type": "ui_chart",
         "z": "19b2123be04c3afe",
-        "name": "spacer",
+        "name": "",
         "group": "50845112f534a89e",
-        "order": 4,
-        "width": 8,
-        "height": 1
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "label": "Vibrace",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "1",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#fd3535",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 920,
+        "y": 500,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b4f5be232f4879cd",
+        "type": "function",
+        "z": "19b2123be04c3afe",
+        "name": "convertState",
+        "func": "if (msg.payload == \"0\") {\n    msg.payload = 1;\n} else {\n    msg.payload = 0;\n}\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 690,
+        "y": 500,
+        "wires": [
+            [
+                "3b50c0aeba261013"
+            ]
+        ]
     },
     {
         "id": "169f128ab66c688b",
