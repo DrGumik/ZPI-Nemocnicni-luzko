@@ -1,5 +1,11 @@
 # ZPI - Semestrální práce - nemocniční postel - DOKUMENTACE
 
+### Seznam souborů
+```
+- Program.c - hlavní program napsaný v jazyce C, který ovládá senzory
+- node-red.json - data (program) sestavený v Node-Red (stačí jen importovat)
+```
+
 ### Potřebný hardware
 ```
 - Raspberry Pi 4
@@ -51,6 +57,9 @@ sudo apt install build-essential
 ```
 wget https://github.com/WiringPi/WiringPi/releases/download/2.61-1/wiringpi-2.61-1-armhf.deb
 sudo dpkg -i wiringpi-2.61-1-armhf.deb
+
+Přidáme do /etc/ld.so.conf (třeba pomocí nano) řádku /usr/local/lib
+Poté zavoláme sudo ldconfig
 ```
 
 7. Nastavení GPIO pinů, I2C a WiringPi
