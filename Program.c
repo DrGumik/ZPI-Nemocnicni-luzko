@@ -3,11 +3,14 @@ ADR: raspberrypi.local
 SSH: username: pi
      pass: 1234
 
-Compile: gcc postel.c -o postel -I/usr/local/include -L/usr/local/lib -lwiringPi
+Compile: gcc postel.c -o postel -I/usr/local/include -L/usr/local/lib -lwiringPi -lmosquitto -lm
 Run: ./postel
 
-Libs: WiringPi
-Others required apps: gcc
+Libs: 
+    WiringPi
+    Math
+    Mosquitto
+    StdLib, StdIO
 */
 
 /*
