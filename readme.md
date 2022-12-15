@@ -3,12 +3,12 @@
 ### Potřebný hardware
 ```
 - Raspberry Pi 4
-- Gyroskop + akcelerometr (MPUxxx)
+- Gyroskop + akcelerometr (MPU6050)
 - IR senzor
 - Senzor vibrací
 - Senzor EKG (nepoužit, výstupní data jsou analogová a RPI nemá ADC)
 - PIR senzor
-- Tenzometr
+- Tenzometr (nepoužit, při testování funkčnosti prasknul)
 ```
 
 ### Instalace
