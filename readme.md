@@ -1,4 +1,10 @@
-# ZPI - Semestrální práce - nemocniční postel - DOKUMENTACE
+<p align="left">
+  <h1>ZPI - Semestrální práce - nemocniční postel</h1>
+  <a href="https://github.com/DrGumik/ZPI-Nemocnicni-luzko"><img src="https://img.shields.io/static/v1?label=DrGumik&message=ZPI-Nemocnicni-luzko&color=yellow&logo=github" alt="ZPI - Nemocnicni luzko"></a>
+  <a href="#license"><img src="https://img.shields.io/badge/License-MIT-blueviolet" alt="License"></a>
+  <a href="https://github.com/DrGumik/ZPI-Nemocnicni-luzko" alt="Activity"><img src="https://img.shields.io/github/commit-activity/m/DrGumik/ZPI-Nemocnicni-luzko" /></a>
+  <a href="https://github.com/DrGumik/ZPI-Nemocnicni-luzko" alt="LastCommit"><img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/drgumik/ZPI-Nemocnicni-luzko"></a>
+</p>
 
 ### Seznam souborů
 ```
